@@ -1,14 +1,14 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from "vite";
+import laravel from "laravel-vite-plugin";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
     plugins: [
         laravel({
             input: [
-                'resources/css/app.css',
-                'resources/js/app.js',
-                'resources/js/chat-widget/index.js',
+                "resources/css/app.css",
+                "resources/js/app.js",
+                "resources/js/chat-widget/index.js",
             ],
             refresh: true,
         }),
@@ -16,18 +16,22 @@ export default defineConfig({
     ],
     server: {
         watch: {
-            ignored: ['**/storage/framework/views/**'],
+            ignored: ["**/storage/framework/views/**"],
         },
     },
     build: {
         rollupOptions: {
             output: {
                 entryFileNames: (chunkInfo) => {
-                    if (chunkInfo.name === 'index' || chunkInfo.facadeModuleId?.includes('chat-widget')) {
-                        return 'pacman-chat-widget.js';
+                    if (
+                        chunkInfo.name === "index" ||
+                        chunkInfo.facadeModuleId?.includes("chat-widget")
+                    ) {
+                        return "pacman-chat-widget.js";
                     }
-                    return 'assets/[name]-[hash].js';
+                    return "assets/[name]-[hash].js";
                 },
+                assetFileNames: "assets/[name]-[hash].[ext]",
             },
         },
     },

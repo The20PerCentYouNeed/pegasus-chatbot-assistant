@@ -11,7 +11,7 @@ import {
     setInputEnabled,
     showError,
 } from "./ui.js";
-import "./styles.css";
+import styles from './styles.css?inline';
 
 (function () {
     const scriptTag =
@@ -23,6 +23,9 @@ import "./styles.css";
     configure(apiUrl);
 
     document.addEventListener("DOMContentLoaded", () => {
+        const styleEl = document.createElement('style');
+        styleEl.textContent = styles;
+        document.head.appendChild(styleEl);
         const wrapper = document.createElement("div");
         wrapper.id = "pacman-chat-widget";
         document.body.appendChild(wrapper);
