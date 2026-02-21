@@ -10,6 +10,7 @@ return [
         env('FRONTEND_URL', 'http://localhost:3000'),
         'https://pack-man.gr',
         'https://www.pack-man.gr',
+        'https://noctuacore.ai',
         'https://www.noctuacore.ai',
     ],
 
