@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
 class ChatSessionController extends Controller
@@ -32,26 +31,4 @@ class ChatSessionController extends Controller
         ], 201);
     }
 
-    /**
-     * Get current session info.
-     */
-    public function show(Request $request): JsonResponse
-    {
-        $user = $request->user();
-
-        return response()->json([
-            'user_id' => $user->id,
-            'is_guest' => $user->is_guest,
-        ]);
-    }
-
-    /**
-     * Revoke the current token.
-     */
-    public function destroy(Request $request): JsonResponse
-    {
-        $request->user()->currentAccessToken()->delete();
-
-        return response()->json(['message' => 'Session revoked.']);
-    }
 }

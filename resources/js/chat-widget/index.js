@@ -123,8 +123,7 @@ import styles from './styles.css?inline';
         });
 
         ui.getInput().addEventListener("input", function () {
-            this.style.height = "auto";
-            this.style.height = Math.min(this.scrollHeight, 100) + "px";
+            ui.getSendBtn().disabled = !this.value.trim();
         });
     });
 })();

@@ -1,23 +1,49 @@
+const BOT_AVATAR_SVG = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`;
+
 export function mount(container) {
     container.innerHTML = `
-        <div class="pcm-bubble" aria-label="Open chat">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="m3 21 1.9-5.7a8.5 8.5 0 1 1 3.8 3.8z"/>
+        <button class="pcm-bubble" aria-label="Open chat">
+            <svg class="pcm-icon-chat" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
             </svg>
-        </div>
+            <svg class="pcm-icon-close" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </button>
         <div class="pcm-panel pcm-hidden">
             <div class="pcm-header">
-                <span class="pcm-header-title">Pack-Man Support</span>
-                <button class="pcm-close" aria-label="Close chat">&times;</button>
+                <div class="pcm-header-left">
+                    <div class="pcm-avatar">
+                        <div class="pcm-avatar-icon">${BOT_AVATAR_SVG}</div>
+                        <div class="pcm-avatar-status"></div>
+                    </div>
+                    <div>
+                        <div class="pcm-header-title">Pack-Man AI Assistant</div>
+                        <div class="pcm-header-subtitle">
+                            <span class="pcm-online-dot"></span>
+                            Online · AI-Powered
+                        </div>
+                    </div>
+                </div>
+                <button class="pcm-close" aria-label="Close chat">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
             </div>
             <div class="pcm-messages"></div>
             <div class="pcm-input-area">
-                <textarea class="pcm-input" placeholder="Γράψε το μήνυμά σου..." rows="1"></textarea>
-                <button class="pcm-send" aria-label="Send message">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-                    </svg>
-                </button>
+                <div class="pcm-input-row">
+                    <div class="pcm-input-wrapper">
+                        <input type="text" class="pcm-input" placeholder="Γράψτε την ερώτησή σας..." />
+                    </div>
+                    <button class="pcm-send" disabled aria-label="Send message">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 21l21-9L2 3v7l15 2-15 2v7z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="pcm-powered-by"><a href="https://www.noctuacore.ai" target="_blank" rel="noopener noreferrer">Powered by Noctuacore AI</a></div>
             </div>
         </div>
     `;
@@ -28,64 +54,113 @@ export function mount(container) {
 
     let onOpenCallback = null;
 
-    bubble.addEventListener("click", () => {
+    function openPanel() {
         panel.classList.remove("pcm-hidden");
-        bubble.classList.add("pcm-hidden");
+        bubble.classList.add("pcm-open");
         container.querySelector(".pcm-input").focus();
         if (onOpenCallback) onOpenCallback();
+    }
+
+    function closePanel() {
+        panel.classList.add("pcm-hidden");
+        bubble.classList.remove("pcm-open");
+    }
+
+    bubble.addEventListener("click", () => {
+        if (bubble.classList.contains("pcm-open")) {
+            closePanel();
+        } else {
+            openPanel();
+        }
     });
 
-    closeBtn.addEventListener("click", () => {
-        panel.classList.add("pcm-hidden");
-        bubble.classList.remove("pcm-hidden");
-    });
+    closeBtn.addEventListener("click", closePanel);
 
     return {
         getInput: () => container.querySelector(".pcm-input"),
         getSendBtn: () => container.querySelector(".pcm-send"),
         getMessagesContainer: () => container.querySelector(".pcm-messages"),
-        onOpen(cb) { onOpenCallback = cb; },
+        onOpen(cb) {
+            onOpenCallback = cb;
+        },
     };
 }
 
 export function appendMessage(container, role, content) {
     const messagesEl = container.querySelector(".pcm-messages");
-    const msgEl = document.createElement("div");
-    msgEl.classList.add("pcm-msg", `pcm-msg-${role}`);
-    msgEl.textContent = content;
-    messagesEl.appendChild(msgEl);
+    const row = document.createElement("div");
+    row.classList.add(
+        "pcm-msg-row",
+        role === "user" ? "pcm-msg-row-user" : "pcm-msg-row-bot",
+    );
+
+    if (role === "assistant") {
+        const avatar = document.createElement("div");
+        avatar.classList.add("pcm-bot-avatar");
+        avatar.innerHTML = BOT_AVATAR_SVG;
+        row.appendChild(avatar);
+    }
+
+    const bubble = document.createElement("div");
+    bubble.classList.add("pcm-msg", `pcm-msg-${role}`);
+    bubble.textContent = content;
+    row.appendChild(bubble);
+
+    messagesEl.appendChild(row);
     messagesEl.scrollTop = messagesEl.scrollHeight;
-    return msgEl;
+    return bubble;
 }
 
 export function showTypingIndicator(container) {
     const messagesEl = container.querySelector(".pcm-messages");
-    const el = document.createElement("div");
-    el.classList.add("pcm-msg", "pcm-msg-assistant", "pcm-typing");
-    el.innerHTML = '<span class="pcm-dot"></span><span class="pcm-dot"></span><span class="pcm-dot"></span>';
-    messagesEl.appendChild(el);
+    const row = document.createElement("div");
+    row.classList.add("pcm-msg-row", "pcm-msg-row-bot", "pcm-typing-row");
+
+    const avatar = document.createElement("div");
+    avatar.classList.add("pcm-bot-avatar");
+    avatar.innerHTML = BOT_AVATAR_SVG;
+    row.appendChild(avatar);
+
+    const dots = document.createElement("div");
+    dots.classList.add("pcm-typing-dots");
+    dots.innerHTML =
+        '<span class="pcm-dot"></span><span class="pcm-dot"></span><span class="pcm-dot"></span>';
+    row.appendChild(dots);
+
+    messagesEl.appendChild(row);
     messagesEl.scrollTop = messagesEl.scrollHeight;
-    return el;
+    return row;
 }
 
 export function removeTypingIndicator(container) {
-    const el = container.querySelector(".pcm-typing");
+    const el = container.querySelector(".pcm-typing-row");
     if (el) el.remove();
 }
 
 export function appendStreamingMessage(container) {
     removeTypingIndicator(container);
     const messagesEl = container.querySelector(".pcm-messages");
-    const msgEl = document.createElement("div");
-    msgEl.classList.add("pcm-msg", "pcm-msg-assistant", "pcm-streaming");
-    messagesEl.appendChild(msgEl);
+
+    const row = document.createElement("div");
+    row.classList.add("pcm-msg-row", "pcm-msg-row-bot");
+
+    const avatar = document.createElement("div");
+    avatar.classList.add("pcm-bot-avatar");
+    avatar.innerHTML = BOT_AVATAR_SVG;
+    row.appendChild(avatar);
+
+    const bubble = document.createElement("div");
+    bubble.classList.add("pcm-msg", "pcm-msg-assistant", "pcm-streaming");
+    row.appendChild(bubble);
+
+    messagesEl.appendChild(row);
     messagesEl.scrollTop = messagesEl.scrollHeight;
-    return msgEl;
+    return bubble;
 }
 
 export function appendToStreaming(msgEl, token) {
     msgEl.textContent += token;
-    const messagesEl = msgEl.parentElement;
+    const messagesEl = msgEl.closest(".pcm-messages");
     if (messagesEl) {
         messagesEl.scrollTop = messagesEl.scrollHeight;
     }
@@ -99,9 +174,14 @@ export function setInputEnabled(container, enabled) {
     const input = container.querySelector(".pcm-input");
     const btn = container.querySelector(".pcm-send");
     input.disabled = !enabled;
-    btn.disabled = !enabled;
+    btn.disabled = !enabled || !input.value.trim();
 }
 
 export function showError(container, message) {
-    appendMessage(container, "error", message);
+    const messagesEl = container.querySelector(".pcm-messages");
+    const msgEl = document.createElement("div");
+    msgEl.classList.add("pcm-msg", "pcm-msg-error");
+    msgEl.textContent = message;
+    messagesEl.appendChild(msgEl);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
 }

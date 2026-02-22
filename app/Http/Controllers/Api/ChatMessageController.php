@@ -38,7 +38,7 @@ class ChatMessageController extends Controller
             ->latest('updated_at')
             ->first();
 
-        if (! $conversation) {
+        if (!$conversation) {
             return response()->json([]);
         }
 

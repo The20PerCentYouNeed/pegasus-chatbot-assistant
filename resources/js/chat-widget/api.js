@@ -20,6 +20,11 @@ export async function initSession() {
     return res.json();
 }
 
+const WELCOME_MESSAGE = {
+    role: "assistant",
+    content: "Γεια σου! 👋 Είμαι ο AI Assistant της Pack-Man Courier. Ρώτα με ό,τι θέλεις σχετικά με αποστολές, υπηρεσίες ή οτιδήποτε άλλο — είμαι εδώ να βοηθήσω!",
+};
+
 export async function fetchMessages(token) {
     const res = await fetch(`${baseUrl}/api/chat/messages`, {
         headers: {
@@ -32,7 +37,8 @@ export async function fetchMessages(token) {
         throw new Error(`Fetch messages failed: ${res.status}`);
     }
 
-    return res.json();
+    const messages = await res.json();
+    return [WELCOME_MESSAGE, ...messages];
 }
 
 export async function sendMessage(token, message) {
