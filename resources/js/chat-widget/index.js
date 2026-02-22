@@ -1,4 +1,10 @@
-import { configure, initSession, sendMessage, fetchMessages } from "./api.js";
+import {
+    configure,
+    initSession,
+    sendMessage,
+    fetchMessages,
+    WELCOME_MESSAGE,
+} from "./api.js";
 import { processStream } from "./sse.js";
 import { getSession, saveSession } from "./storage.js";
 import {
@@ -11,7 +17,7 @@ import {
     setInputEnabled,
     showError,
 } from "./ui.js";
-import styles from './styles.css?inline';
+import styles from "./styles.css?inline";
 
 (function () {
     const scriptTag =
@@ -23,7 +29,7 @@ import styles from './styles.css?inline';
     configure(apiUrl);
 
     document.addEventListener("DOMContentLoaded", () => {
-        const styleEl = document.createElement('style');
+        const styleEl = document.createElement("style");
         styleEl.textContent = styles;
         document.head.appendChild(styleEl);
         const wrapper = document.createElement("div");
@@ -55,6 +61,12 @@ import styles from './styles.css?inline';
         async function loadHistory() {
             if (historyLoaded) return;
             historyLoaded = true;
+
+            appendMessage(
+                wrapper,
+                WELCOME_MESSAGE.role,
+                WELCOME_MESSAGE.content,
+            );
 
             const session = getSession();
             if (!session?.token) return;
