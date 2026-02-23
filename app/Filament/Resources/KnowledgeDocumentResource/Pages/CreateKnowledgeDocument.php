@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\KnowledgeDocumentResource\Pages;
 
 use App\Filament\Resources\KnowledgeDocumentResource;
-use App\Jobs\ProcessKnowledgeDocument;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Storage;
 
@@ -23,10 +22,5 @@ class CreateKnowledgeDocument extends CreateRecord
         $data['status'] = 'pending';
 
         return $data;
-    }
-
-    protected function afterCreate(): void
-    {
-        ProcessKnowledgeDocument::dispatch($this->record);
     }
 }
