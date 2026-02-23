@@ -15,6 +15,7 @@ class KnowledgeDocument extends Model
     protected $fillable = [
         'agent_id',
         'name',
+        'file_path',
         'openai_file_id',
         'vector_store_document_id',
         'file_size',

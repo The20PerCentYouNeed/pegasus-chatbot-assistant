@@ -59,6 +59,11 @@ class Agent extends Model
         return $this->hasMany(KnowledgeDocument::class);
     }
 
+    public function metrics(): HasMany
+    {
+        return $this->hasMany(AgentMetric::class);
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);

@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'pcm_chat';
+const STORAGE_KEY = "pcm_chat";
 const TTL_MS = 24 * 60 * 60 * 1000;
 
 export function getSession() {

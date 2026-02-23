@@ -21,7 +21,9 @@ class KnowledgeDocumentResource extends Resource
 
     protected static ?string $navigationLabel = 'Knowledge Base';
 
-    protected static ?int $navigationSort = 3;
+    protected static string|\UnitEnum|null $navigationGroup = 'Management';
+
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {
@@ -30,9 +32,19 @@ class KnowledgeDocumentResource extends Resource
                 ->relationship('agent', 'name')
                 ->required(),
 
-            FileUpload::make('file')
+            FileUpload::make('file_path')
                 ->label('Document File')
                 ->required()
+                ->directory('knowledge-documents')
+                ->acceptedFileTypes([
+                    'application/pdf',
+                    'text/plain',
+                    'text/markdown',
+                    'text/csv',
+                    'application/json',
+                    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                ])
+                ->maxSize(20480)
                 ->columnSpanFull(),
         ]);
     }
