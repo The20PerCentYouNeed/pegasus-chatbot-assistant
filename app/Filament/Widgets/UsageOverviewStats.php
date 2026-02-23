@@ -37,7 +37,7 @@ class UsageOverviewStats extends StatsOverviewWidget
                 ->icon('heroicon-o-calculator')
                 ->color('primary'),
 
-            Stat::make('Tokens per Message', number_format($tokensPerMessage))
+            Stat::make('Tokens per Message (Average)', number_format($tokensPerMessage))
                 ->description('Average across all agents')
                 ->icon('heroicon-o-chart-bar')
                 ->color('success'),

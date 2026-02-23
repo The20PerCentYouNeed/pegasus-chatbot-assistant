@@ -46,6 +46,8 @@ class MessagesTrendChart extends ChartWidget
                     'data' => $data->pluck('agent_msgs')->toArray(),
                     'borderColor' => 'rgb(168, 85, 247)',
                     'backgroundColor' => 'rgba(168, 85, 247, 0.1)',
+                    'pointStyle' => 'triangle',
+                    'pointRadius' => 6,
                 ],
             ],
             'labels' => $data->pluck('date')->map(fn ($date) => Carbon::parse($date)->format('M j'))->toArray(),
