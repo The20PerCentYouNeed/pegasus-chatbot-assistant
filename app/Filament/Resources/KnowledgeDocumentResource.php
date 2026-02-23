@@ -36,6 +36,7 @@ class KnowledgeDocumentResource extends Resource
                 ->label('Document File')
                 ->required()
                 ->directory('knowledge-documents')
+                ->preserveFilenames()
                 ->acceptedFileTypes([
                     'application/pdf',
                     'text/plain',
