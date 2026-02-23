@@ -30,6 +30,13 @@ class ProcessKnowledgeDocument implements ShouldQueue
         $document = $this->knowledgeDocument;
         $agent = $document->agent;
 
+        Log::info('ProcessKnowledgeDocument starting', [
+            'document_id' => $document->id,
+            'file_path' => $document->file_path,
+            'default_disk' => config('filesystems.default'),
+            'file_exists' => \Illuminate\Support\Facades\Storage::exists($document->file_path),
+        ]);
+
         $document->update(['status' => KnowledgeDocument::STATUS_PROCESSING]);
 
         if (!$agent->vector_store_id) {
