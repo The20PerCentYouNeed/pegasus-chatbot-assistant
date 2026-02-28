@@ -36,18 +36,23 @@ import styles from "./styles.css?inline";
         wrapper.id = "pacman-chat-widget";
         document.body.appendChild(wrapper);
 
-        const ui = mount(wrapper);
+        const hasExistingSession = Boolean(getSession()?.token);
+        const ui = mount(wrapper, { showTeaser: !hasExistingSession });
         let isProcessing = false;
         let historyLoaded = false;
 
         async function ensureSession() {
             let session = getSession();
-            if (session?.token) return session;
+            if (session?.token) {
+                ui.disableTeaser();
+                return session;
+            }
 
             try {
                 const data = await initSession();
                 session = { token: data.token, userId: data.user_id };
                 saveSession(session);
+                ui.disableTeaser();
                 return session;
             } catch (err) {
                 showError(

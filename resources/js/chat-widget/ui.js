@@ -1,7 +1,13 @@
 const BOT_AVATAR_SVG = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`;
 
-export function mount(container) {
+export function mount(container, options = {}) {
+    const shouldShowTeaser = options.showTeaser ?? true;
+
     container.innerHTML = `
+        <button class="pcm-teaser ${shouldShowTeaser ? "" : "pcm-teaser-hidden"}" aria-label="Open chat teaser" type="button">
+            <span class="pcm-teaser-line pcm-teaser-line-top">Πώς μπορώ να σε</span>
+            <span class="pcm-teaser-line pcm-teaser-line-bottom">βοηθήσω;</span>
+        </button>
         <button class="pcm-bubble" aria-label="Open chat">
             <svg class="pcm-icon-chat" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
@@ -49,14 +55,27 @@ export function mount(container) {
     `;
 
     const bubble = container.querySelector(".pcm-bubble");
+    const teaser = container.querySelector(".pcm-teaser");
     const panel = container.querySelector(".pcm-panel");
     const closeBtn = container.querySelector(".pcm-close");
 
     let onOpenCallback = null;
+    let teaserEnabled = shouldShowTeaser;
+
+    function showTeaser() {
+        if (!teaser || !teaserEnabled) return;
+        teaser.classList.remove("pcm-teaser-hidden");
+    }
+
+    function hideTeaser() {
+        if (!teaser) return;
+        teaser.classList.add("pcm-teaser-hidden");
+    }
 
     function openPanel() {
         panel.classList.remove("pcm-hidden");
         bubble.classList.add("pcm-open");
+        hideTeaser();
         container.querySelector(".pcm-input").focus();
         if (onOpenCallback) onOpenCallback();
     }
@@ -64,6 +83,12 @@ export function mount(container) {
     function closePanel() {
         panel.classList.add("pcm-hidden");
         bubble.classList.remove("pcm-open");
+        showTeaser();
+    }
+
+    function disableTeaser() {
+        teaserEnabled = false;
+        hideTeaser();
     }
 
     bubble.addEventListener("click", () => {
@@ -74,12 +99,15 @@ export function mount(container) {
         }
     });
 
+    teaser?.addEventListener("click", openPanel);
+
     closeBtn.addEventListener("click", closePanel);
 
     return {
         getInput: () => container.querySelector(".pcm-input"),
         getSendBtn: () => container.querySelector(".pcm-send"),
         getMessagesContainer: () => container.querySelector(".pcm-messages"),
+        disableTeaser,
         onOpen(cb) {
             onOpenCallback = cb;
         },
