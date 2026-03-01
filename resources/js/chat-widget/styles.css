@@ -332,6 +332,23 @@
     padding-left: 1.25rem;
 }
 
+#pacman-chat-widget .pcm-msg-markdown ul {
+    list-style: disc outside;
+    margin: 0.5rem 0;
+    padding-left: 1.25rem;
+}
+
+#pacman-chat-widget .pcm-msg-markdown ol {
+    list-style: decimal outside;
+    margin: 0.5rem 0;
+    padding-left: 1.25rem;
+}
+
+#pacman-chat-widget .pcm-msg-markdown li {
+    display: list-item;
+    margin: 0.125rem 0;
+}
+
 .pcm-msg-markdown pre,
 .pcm-msg-markdown code {
     font-family:
