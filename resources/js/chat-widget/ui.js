@@ -208,7 +208,11 @@ export function appendToStreaming(msgEl, token) {
 export function finalizeStreaming(msgEl) {
     msgEl.classList.remove("pcm-streaming");
     msgEl.classList.add("pcm-msg-markdown");
-    msgEl.innerHTML = renderMarkdown(msgEl.dataset.rawText || msgEl.textContent);
+    msgEl.innerHTML = renderMarkdown(
+        msgEl.dataset.rawText || msgEl.textContent,
+    );
+
+    console.log("Finalized message:", msgEl.dataset.rawText);
     delete msgEl.dataset.rawText;
 }
 
