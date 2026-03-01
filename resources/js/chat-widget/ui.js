@@ -1,3 +1,5 @@
+import { renderMarkdown } from "./markdown.js";
+
 const BOT_AVATAR_SVG = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`;
 
 export function mount(container, options = {}) {
@@ -131,7 +133,14 @@ export function appendMessage(container, role, content) {
 
     const bubble = document.createElement("div");
     bubble.classList.add("pcm-msg", `pcm-msg-${role}`);
-    bubble.textContent = content;
+
+    if (role === "assistant") {
+        bubble.classList.add("pcm-msg-markdown");
+        bubble.innerHTML = renderMarkdown(content);
+    } else {
+        bubble.textContent = content;
+    }
+
     row.appendChild(bubble);
 
     messagesEl.appendChild(row);
@@ -179,6 +188,7 @@ export function appendStreamingMessage(container) {
 
     const bubble = document.createElement("div");
     bubble.classList.add("pcm-msg", "pcm-msg-assistant", "pcm-streaming");
+    bubble.dataset.rawText = "";
     row.appendChild(bubble);
 
     messagesEl.appendChild(row);
@@ -187,6 +197,7 @@ export function appendStreamingMessage(container) {
 }
 
 export function appendToStreaming(msgEl, token) {
+    msgEl.dataset.rawText = `${msgEl.dataset.rawText || ""}${token}`;
     msgEl.textContent += token;
     const messagesEl = msgEl.closest(".pcm-messages");
     if (messagesEl) {
@@ -196,6 +207,9 @@ export function appendToStreaming(msgEl, token) {
 
 export function finalizeStreaming(msgEl) {
     msgEl.classList.remove("pcm-streaming");
+    msgEl.classList.add("pcm-msg-markdown");
+    msgEl.innerHTML = renderMarkdown(msgEl.dataset.rawText || msgEl.textContent);
+    delete msgEl.dataset.rawText;
 }
 
 export function setInputEnabled(container, enabled) {

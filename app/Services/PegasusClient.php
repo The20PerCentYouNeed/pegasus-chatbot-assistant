@@ -2,68 +2,112 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 
 class PegasusClient
 {
+    private const R18_FIELDS = [
+        'p01',
+        'p0203',
+        'p101',
+        'p014',
+        'p026',
+        'p022',
+        'p012',
+        'p123',
+    ];
+
+    private const R13_DRIVER_FIELDS = [
+        'p119',
+        'r15p07',
+        'p110',
+        'p111',
+        'p04_r01_p02',
+    ];
+
     protected string $baseUrl;
-
-    protected string $apiKey;
-
-    protected int $timeout;
+    protected string $appID;
+    protected string $username;
+    protected string $password;
 
     public function __construct()
     {
-        $this->baseUrl = rtrim(config('pacman.pegasus.base_url', ''), '/');
-        $this->apiKey = config('pacman.pegasus.api_key', '');
-        $this->timeout = config('pacman.pegasus.timeout', 30);
+        $this->baseUrl = config('services.pegasus.base_url');
+        $this->appID = config('services.pegasus.app_id');
+        $this->username = config('services.pegasus.username');
+        $this->password = config('services.pegasus.password');
     }
 
     /**
-     * Get full voucher information: tracking status, details, and pricing.
+     * Get voucher fields from Pegasus.
      *
-     * @return array{status: string, details: array, pricing: array}
+     * @return array<string, mixed>
      */
-    public function getVoucher(string $code): array
+    public function getVoucherInformation(string $code): array
     {
-        if (! $this->baseUrl) {
-            return [
-                'error' => false,
-                'message' => 'Pegasus integration pending — API credentials not configured.',
-                'voucher_code' => $code,
-            ];
-        }
+        return Arr::only(
+            $this->request('courier00/r18', [
+                'filter[and][0][p01][equals]' => $code,
+                'recperpage' => 1,
+            ])[0] ?? [],
+            self::R18_FIELDS
+        );
+    }
 
-        $response = Http::timeout($this->timeout)
-            ->withHeaders(['Authorization' => "Bearer {$this->apiKey}"])
-            ->get("{$this->baseUrl}/vouchers/{$code}");
+    /**
+     * Get logistics fields from Pegasus .
+     *
+     * @return array<string, mixed>
+     */
+    public function getVoucherDriverInformation(string $code): array
+    {
 
-        $response->throw();
-
-        return $response->json();
+        return Arr::only(
+            $this->request('courier00/r13_driver', [
+                'filter[and][0][p01][equals]' => $code,
+                'recperpage' => 1,
+            ])[0] ?? [],
+            self::R13_DRIVER_FIELDS
+        );
     }
 
     /**
      * Get voucher tracking status only.
-     *
-     * @return array{status: string, last_update: string}
      */
-    public function getVoucherStatus(string $code): array
+    public function getVoucherStatuses(): array
     {
-        if (! $this->baseUrl) {
-            return [
-                'error' => false,
-                'message' => 'Pegasus integration pending — API credentials not configured.',
-                'voucher_code' => $code,
-            ];
+        return collect($this->request('courier00/r14'))
+            ->mapWithKeys(fn ($item) => [$item['p01'] => $item['p02']])
+            ->all();
+    }
+
+    public function login()
+    {
+        return Http::withQueryParameters([
+            'appid' => $this->appID,
+            'username' => $this->username,
+            'password' => $this->password,
+        ])->post("{$this->baseUrl}/pegapi/login")
+            ->throw()
+            ->json('data.sid');
+    }
+
+    public function request(string $endpoint, array $queryParams = [], string $method = 'GET'): array
+    {
+        if (!$sid = cache('pegasus_erp_sid')) {
+            $sid = $this->login();
+            cache()->put('pegasus_erp_sid', $sid, now()->addMinutes(30));
         }
 
-        $response = Http::timeout($this->timeout)
-            ->withHeaders(['Authorization' => "Bearer {$this->apiKey}"])
-            ->get("{$this->baseUrl}/vouchers/{$code}/status");
+        $queryParams = array_merge($queryParams, [
+            'appid' => $this->appID,
+            'sid' => $sid,
+        ]);
 
-        $response->throw();
-
-        return $response->json();
+        return Http::withQueryParameters($queryParams)
+            ->$method("{$this->baseUrl}/{$endpoint}")
+            ->throw()
+            ->json('data', []);
     }
 }

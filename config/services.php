@@ -35,4 +35,11 @@ return [
         ],
     ],
 
+    'pegasus' => [
+        'base_url' => env('PEGASUS_BASE_URL'),
+        'app_id' => env('PEGASUS_APP_ID'),
+        'username' => env('PEGASUS_USERNAME'),
+        'password' => env('PEGASUS_PASSWORD'),
+    ],
+
 ];

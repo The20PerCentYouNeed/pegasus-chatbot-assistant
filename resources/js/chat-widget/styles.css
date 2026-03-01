@@ -293,6 +293,7 @@
     background: #000;
     color: #fff;
     border-bottom-right-radius: 0;
+    white-space: pre-wrap;
 }
 
 .pcm-msg-user strong {
@@ -306,8 +307,73 @@
     border-top-left-radius: 0;
 }
 
+.pcm-msg-markdown {
+    white-space: normal;
+}
+
+.pcm-msg-markdown > :first-child {
+    margin-top: 0;
+}
+
+.pcm-msg-markdown > :last-child {
+    margin-bottom: 0;
+}
+
+.pcm-msg-markdown p,
+.pcm-msg-markdown ul,
+.pcm-msg-markdown ol,
+.pcm-msg-markdown pre,
+.pcm-msg-markdown blockquote {
+    margin: 0.5rem 0;
+}
+
+.pcm-msg-markdown ul,
+.pcm-msg-markdown ol {
+    padding-left: 1.25rem;
+}
+
+.pcm-msg-markdown pre,
+.pcm-msg-markdown code {
+    font-family:
+        ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+}
+
+.pcm-msg-markdown pre {
+    background: var(--pcm-bg-muted);
+    border: 1px solid var(--pcm-border);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    overflow-x: auto;
+}
+
+.pcm-msg-markdown code {
+    background: var(--pcm-bg-muted);
+    border-radius: 0.25rem;
+    padding: 0.1rem 0.25rem;
+}
+
+.pcm-msg-markdown pre code {
+    background: transparent;
+    padding: 0;
+}
+
+.pcm-msg-markdown a {
+    color: var(--pcm-accent);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.pcm-msg-markdown blockquote {
+    border-left: 3px solid var(--pcm-border);
+    padding-left: 0.75rem;
+    color: var(--pcm-text-light);
+}
+
 .pcm-msg-assistant strong {
-    color: #ea580c;
+    color: var(--pcm-text);
+    font-weight: 700;
 }
 
 .pcm-msg-error {

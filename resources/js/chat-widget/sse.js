@@ -11,20 +11,20 @@ export async function processStream(response, { onToken, onDone, onError }) {
     try {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
-        let buffer = '';
+        let buffer = "";
 
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;
 
             buffer += decoder.decode(value, { stream: true });
-            const lines = buffer.split('\n');
-            buffer = lines.pop() ?? '';
+            const lines = buffer.split("\n");
+            buffer = lines.pop() ?? "";
 
             for (const line of lines) {
-                if (line.startsWith('data: ')) {
+                if (line.startsWith("data: ")) {
                     const data = line.slice(6).trim();
-                    if (data === '[DONE]') {
+                    if (data === "[DONE]") {
                         onDone();
                         return;
                     }
@@ -32,9 +32,7 @@ export async function processStream(response, { onToken, onDone, onError }) {
                     try {
                         const parsed = JSON.parse(data);
 
-                        if (parsed.type === 'text_delta' && parsed.delta) {
-                            // TODO: remove this delay — only for testing the streaming effect
-                            await new Promise(r => setTimeout(r, 50));
+                        if (parsed.type === "text_delta" && parsed.delta) {
                             onToken(parsed.delta);
                         }
                     } catch {
