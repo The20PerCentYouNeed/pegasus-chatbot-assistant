@@ -1,14 +1,18 @@
 import { renderMarkdown } from "./markdown.js";
-import pacmanChatIconPng from "./assets/pacman-chat-icon.png";
-import pacmanChatIconWebp from "./assets/pacman-chat-icon.webp";
 
-const BOT_AVATAR_PICTURE = `<picture class="pcm-avatar-image">
-    <source srcset="${pacmanChatIconWebp}" type="image/webp" />
-    <img src="${pacmanChatIconPng}" alt="Pack-Man AI Assistant" class="pcm-avatar-img" loading="eager" decoding="async" />
-</picture>`;
+const APP_URL = "https://pac-man-delivery.noctuacore.ai";
+const imageUrls = {
+    png: `${APP_URL}/chat-widget/pacman-chat-icon.png`,
+    webp: `${APP_URL}/chat-widget/pacman-chat-icon.webp`,
+};
 
 export function mount(container, options = {}) {
     const shouldShowTeaser = options.showTeaser ?? true;
+
+    const botAvatarPicture = `<picture class="pcm-avatar-image">
+            <source srcset="${imageUrls.webp}" type="image/webp" />
+            <img src="${imageUrls.png}" alt="Pack-Man AI Assistant" class="pcm-avatar-img" loading="eager" decoding="async" />
+        </picture>`;
 
     container.innerHTML = `
         <button class="pcm-teaser ${shouldShowTeaser ? "" : "pcm-teaser-hidden"}" aria-label="Open chat teaser" type="button">
@@ -17,8 +21,8 @@ export function mount(container, options = {}) {
         </button>
         <button class="pcm-bubble" aria-label="Open chat">
             <picture class="pcm-icon-chat">
-                <source srcset="${pacmanChatIconWebp}" type="image/webp" />
-                <img src="${pacmanChatIconPng}" alt="Pack-Man chat" class="pcm-icon-chat-img" width="40" height="40" loading="eager" decoding="async" />
+                <source srcset="${imageUrls.webp}" type="image/webp" />
+                <img src="${imageUrls.png}" alt="Pack-Man chat" class="pcm-icon-chat-img" width="40" height="40" loading="eager" decoding="async" />
             </picture>
             <svg class="pcm-icon-close" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -28,7 +32,7 @@ export function mount(container, options = {}) {
             <div class="pcm-header">
                 <div class="pcm-header-left">
                     <div class="pcm-avatar">
-                        <div class="pcm-avatar-icon">${BOT_AVATAR_PICTURE}</div>
+                        <div class="pcm-avatar-icon">${botAvatarPicture}</div>
                         <div class="pcm-avatar-status"></div>
                     </div>
                     <div>
