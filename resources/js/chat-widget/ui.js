@@ -6,13 +6,13 @@ const imageUrls = {
     webp: `${APP_URL}/chat-widget/pacman-chat-icon.webp`,
 };
 
+const BOT_AVATAR_PICTURE = `<picture class="pcm-avatar-image">
+    <source srcset="${imageUrls.webp}" type="image/webp" />
+    <img src="${imageUrls.png}" alt="Pack-Man AI Assistant" class="pcm-avatar-img" loading="eager" decoding="async" />
+</picture>`;
+
 export function mount(container, options = {}) {
     const shouldShowTeaser = options.showTeaser ?? true;
-
-    const botAvatarPicture = `<picture class="pcm-avatar-image">
-            <source srcset="${imageUrls.webp}" type="image/webp" />
-            <img src="${imageUrls.png}" alt="Pack-Man AI Assistant" class="pcm-avatar-img" loading="eager" decoding="async" />
-        </picture>`;
 
     container.innerHTML = `
         <button class="pcm-teaser ${shouldShowTeaser ? "" : "pcm-teaser-hidden"}" aria-label="Open chat teaser" type="button">
@@ -32,7 +32,7 @@ export function mount(container, options = {}) {
             <div class="pcm-header">
                 <div class="pcm-header-left">
                     <div class="pcm-avatar">
-                        <div class="pcm-avatar-icon">${botAvatarPicture}</div>
+                        <div class="pcm-avatar-icon">${BOT_AVATAR_PICTURE}</div>
                         <div class="pcm-avatar-status"></div>
                     </div>
                     <div>
