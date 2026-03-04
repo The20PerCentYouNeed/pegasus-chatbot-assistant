@@ -1,6 +1,11 @@
 import { renderMarkdown } from "./markdown.js";
+import pacmanChatIconPng from "./assets/pacman-chat-icon.png";
+import pacmanChatIconWebp from "./assets/pacman-chat-icon.webp";
 
-const BOT_AVATAR_SVG = `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`;
+const BOT_AVATAR_PICTURE = `<picture class="pcm-avatar-image">
+    <source srcset="${pacmanChatIconWebp}" type="image/webp" />
+    <img src="${pacmanChatIconPng}" alt="Pack-Man AI Assistant" class="pcm-avatar-img" loading="eager" decoding="async" />
+</picture>`;
 
 export function mount(container, options = {}) {
     const shouldShowTeaser = options.showTeaser ?? true;
@@ -11,9 +16,10 @@ export function mount(container, options = {}) {
             <span class="pcm-teaser-line pcm-teaser-line-bottom">βοηθήσω;</span>
         </button>
         <button class="pcm-bubble" aria-label="Open chat">
-            <svg class="pcm-icon-chat" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
-            </svg>
+            <picture class="pcm-icon-chat">
+                <source srcset="${pacmanChatIconWebp}" type="image/webp" />
+                <img src="${pacmanChatIconPng}" alt="Pack-Man chat" class="pcm-icon-chat-img" width="40" height="40" loading="eager" decoding="async" />
+            </picture>
             <svg class="pcm-icon-close" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
@@ -22,7 +28,7 @@ export function mount(container, options = {}) {
             <div class="pcm-header">
                 <div class="pcm-header-left">
                     <div class="pcm-avatar">
-                        <div class="pcm-avatar-icon">${BOT_AVATAR_SVG}</div>
+                        <div class="pcm-avatar-icon">${BOT_AVATAR_PICTURE}</div>
                         <div class="pcm-avatar-status"></div>
                     </div>
                     <div>
@@ -127,7 +133,7 @@ export function appendMessage(container, role, content) {
     if (role === "assistant") {
         const avatar = document.createElement("div");
         avatar.classList.add("pcm-bot-avatar");
-        avatar.innerHTML = BOT_AVATAR_SVG;
+        avatar.innerHTML = BOT_AVATAR_PICTURE;
         row.appendChild(avatar);
     }
 
@@ -155,7 +161,7 @@ export function showTypingIndicator(container) {
 
     const avatar = document.createElement("div");
     avatar.classList.add("pcm-bot-avatar");
-    avatar.innerHTML = BOT_AVATAR_SVG;
+    avatar.innerHTML = BOT_AVATAR_PICTURE;
     row.appendChild(avatar);
 
     const dots = document.createElement("div");
@@ -183,7 +189,7 @@ export function appendStreamingMessage(container) {
 
     const avatar = document.createElement("div");
     avatar.classList.add("pcm-bot-avatar");
-    avatar.innerHTML = BOT_AVATAR_SVG;
+    avatar.innerHTML = BOT_AVATAR_PICTURE;
     row.appendChild(avatar);
 
     const bubble = document.createElement("div");
