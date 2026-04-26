@@ -142,9 +142,3 @@ npm run build
 ## Intended Use Case
 
 This system is intended for courier and logistics businesses that want to improve customer support on their website by offering instant chatbot assistance while keeping the solution aligned with their Pegasus ERP ecosystem.
-
-## CV / Portfolio Summary
-
-If you want to describe this project briefly in a CV or portfolio, you can use the following summary:
-
-> Built an AI-powered customer support assistant for courier companies using Pegasus ERP, featuring a Laravel backend, Pegasus integration layer, admin management tools, and an embeddable website chat widget.
