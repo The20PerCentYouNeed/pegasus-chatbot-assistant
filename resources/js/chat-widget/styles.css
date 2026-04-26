@@ -1,6 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700;900&display=swap");
 
-#pacman-chat-widget {
+#pegasus-chat-widget {
     --pcm-gradient: linear-gradient(135deg, #1e2a78 0%, #24348f 100%);
     --pcm-accent: #fbbf24;
     --pcm-bg: #ffffff;
@@ -360,19 +360,19 @@
     padding-left: 1.25rem;
 }
 
-#pacman-chat-widget .pcm-msg-markdown ul {
+#pegasus-chat-widget .pcm-msg-markdown ul {
     list-style: disc outside;
     margin: 0.5rem 0;
     padding-left: 1.25rem;
 }
 
-#pacman-chat-widget .pcm-msg-markdown ol {
+#pegasus-chat-widget .pcm-msg-markdown ol {
     list-style: decimal outside;
     margin: 0.5rem 0;
     padding-left: 1.25rem;
 }
 
-#pacman-chat-widget .pcm-msg-markdown li {
+#pegasus-chat-widget .pcm-msg-markdown li {
     display: list-item;
     margin: 0.125rem 0;
 }
@@ -585,7 +585,7 @@
 
 /* Responsive - mobile only */
 @media (max-width: 480px) {
-    #pacman-chat-widget {
+    #pegasus-chat-widget {
         bottom: max(16px, env(safe-area-inset-bottom, 0px));
         right: max(35px, env(safe-area-inset-right, 0px));
     }

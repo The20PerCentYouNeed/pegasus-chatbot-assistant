@@ -1,14 +1,15 @@
 import { renderMarkdown } from "./markdown.js";
+import chatbotIconPng from "./assets/chatbot-icon.png";
+import chatbotIconWebp from "./assets/chatbot-icon.webp";
 
-const APP_URL = "https://pac-man-delivery.noctuacore.ai";
 const imageUrls = {
-    png: `${APP_URL}/chat-widget/pacman-chat-icon.png`,
-    webp: `${APP_URL}/chat-widget/pacman-chat-icon.webp`,
+    png: chatbotIconPng,
+    webp: chatbotIconWebp,
 };
 
 const BOT_AVATAR_PICTURE = `<picture class="pcm-avatar-image">
     <source srcset="${imageUrls.webp}" type="image/webp" />
-    <img src="${imageUrls.png}" alt="Pack-Man AI Assistant" class="pcm-avatar-img" loading="eager" decoding="async" />
+    <img src="${imageUrls.png}" alt="Pegasus AI Assistant" class="pcm-avatar-img" loading="eager" decoding="async" />
 </picture>`;
 
 export function mount(container, options = {}) {
@@ -22,7 +23,7 @@ export function mount(container, options = {}) {
         <button class="pcm-bubble" aria-label="Open chat">
             <picture class="pcm-icon-chat">
                 <source srcset="${imageUrls.webp}" type="image/webp" />
-                <img src="${imageUrls.png}" alt="Pack-Man chat" class="pcm-icon-chat-img" width="40" height="40" loading="eager" decoding="async" />
+                <img src="${imageUrls.png}" alt="Pegasus chat" class="pcm-icon-chat-img" width="40" height="40" loading="eager" decoding="async" />
             </picture>
             <svg class="pcm-icon-close" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
@@ -36,10 +37,10 @@ export function mount(container, options = {}) {
                         <div class="pcm-avatar-status"></div>
                     </div>
                     <div>
-                        <div class="pcm-header-title">Pack-Man AI Assistant</div>
+                        <div class="pcm-header-title">Pegasus AI Assistant</div>
                         <div class="pcm-header-subtitle">
                             <span class="pcm-online-dot"></span>
-                            Online · AI-Powered
+                            Online · Connected to Pegasus
                         </div>
                     </div>
                 </div>

@@ -22,9 +22,10 @@ import styles from "./styles.css?inline";
 (function () {
     const scriptTag =
         document.currentScript ||
-        document.querySelector("script[data-pacman-api]");
+        document.querySelector("script[data-pegasus-chat-api]");
     const apiUrl =
-        scriptTag?.getAttribute("data-pacman-api") || window.location.origin;
+        scriptTag?.getAttribute("data-pegasus-chat-api") ||
+        window.location.origin;
 
     configure(apiUrl);
 
@@ -33,7 +34,7 @@ import styles from "./styles.css?inline";
         styleEl.textContent = styles;
         document.head.appendChild(styleEl);
         const wrapper = document.createElement("div");
-        wrapper.id = "pacman-chat-widget";
+        wrapper.id = "pegasus-chat-widget";
         document.body.appendChild(wrapper);
 
         const hasExistingSession = Boolean(getSession()?.token);
@@ -84,7 +85,7 @@ import styles from "./styles.css?inline";
                     }
                 });
             } catch (err) {
-                console.error("[PacMan Chat] Failed to load history", err);
+                console.error("[Pegasus Chat] Failed to load history", err);
             }
         }
 
@@ -115,12 +116,12 @@ import styles from "./styles.css?inline";
                     onError(err) {
                         finalizeStreaming(streamEl);
                         showError(wrapper, "Σφάλμα κατά τη λήψη απάντησης.");
-                        console.error("[PacMan Chat]", err);
+                        console.error("[Pegasus Chat]", err);
                     },
                 });
             } catch (err) {
                 showError(wrapper, "Σφάλμα κατά την αποστολή μηνύματος.");
-                console.error("[PacMan Chat]", err);
+                console.error("[Pegasus Chat]", err);
             } finally {
                 isProcessing = false;
                 setInputEnabled(wrapper, true);

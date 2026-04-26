@@ -27,7 +27,7 @@ export default defineConfig({
                         chunkInfo.name === "index" ||
                         chunkInfo.facadeModuleId?.includes("chat-widget")
                     ) {
-                        return "pacman-chat-widget.js";
+                        return "pegasus-chat-widget.js";
                     }
                     return "assets/[name]-[hash].js";
                 },

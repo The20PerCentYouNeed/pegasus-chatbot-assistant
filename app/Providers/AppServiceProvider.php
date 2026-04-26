@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('chat-message', function (Request $request) {
-            $limit = config('pacman.chat.rate_limit', 20);
+            $limit = config('chatbot.chat.rate_limit', 20);
 
             return Limit::perMinute($limit)->by($request->user()?->id ?: $request->ip());
         });

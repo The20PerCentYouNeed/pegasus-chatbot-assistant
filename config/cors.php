@@ -6,13 +6,12 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => [
+    'allowed_origins' => array_filter([
         env('FRONTEND_URL', 'http://localhost:3000'),
-        'https://pack-man.gr',
-        'https://www.pack-man.gr',
+        env('ADDITIONAL_FRONTEND_URL'),
         'https://noctuacore.ai',
         'https://www.noctuacore.ai',
-    ],
+    ]),
 
     'allowed_origins_patterns' => [],
 

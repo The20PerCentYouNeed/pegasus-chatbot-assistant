@@ -18,7 +18,7 @@ class ChatSessionController extends Controller
 
         $user = User::create([
             'name' => 'Visitor',
-            'email' => "guest-{$uuid}@visitor.pacman.gr",
+            'email' => "guest-{$uuid}@visitor.chatbot.local",
             'password' => Str::random(32),
             'is_guest' => true,
         ]);
@@ -30,5 +30,4 @@ class ChatSessionController extends Controller
             'user_id' => $user->id,
         ], 201);
     }
-
 }
